@@ -1,0 +1,25 @@
+from flask import Flask, render_template, Response
+
+
+app = Flask(__name__)
+@app.route('/')
+def index():
+    #Video streaming home page
+    return render_template('index.html')
+    
+    
+ret, buffer = cv2.imencode('.jpg', frame) #compress and store image to memory buffer
+frame = buffer.tobytes()
+yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') #concat frame one by one and return frame
+
+
+
+@app.route('/video_feed')
+def video_feed():
+    #Video streaming route
+    return Response(process(),mimetype='multipart/x-mixed-replace; boundary=frame')
+    
+    
+    
+if __name__ == "__main__":
+    app.run(host='192.168.0.38',port='5000', debug=False,threaded = True)
